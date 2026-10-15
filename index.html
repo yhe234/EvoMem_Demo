@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EvoRule Harness — Lifelong Harness Adaptation</title>
+<meta name="description" content="EvoRule Harness: Lifelong Harness Adaptation with a Two-Tier Memory of Validated Causal Rules." />
+
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #5b5b5b;
+    --accent: #2b5fb8;
+    --accent-soft: #eef3fb;
+    --border: #e6e6e6;
+    --code-bg: #f6f8fa;
+    --code-fg: #24292f;
+    --card: #fafbfc;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero {
+    padding: 72px 0 48px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  }
+
+  .venue {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+
+  h1.title {
+    font-size: 2.35rem;
+    line-height: 1.22;
+    font-weight: 700;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  p.subtitle {
+    font-size: 1.12rem;
+    color: var(--muted);
+    margin: 0 auto 28px;
+    max-width: 720px;
+    font-weight: 400;
+  }
+
+  .authors {
+    font-size: 1rem;
+    color: var(--fg);
+    margin-bottom: 6px;
+  }
+
+  .affiliation {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--fg);
+    transition: all 0.15s ease;
+  }
+
+  .btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .btn.primary:hover {
+    background: #1f4a94;
+    color: #fff;
+  }
+
+  /* ---------- Sections ---------- */
+  section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-of-type { border-bottom: none; }
+
+  h2 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 28px 0 10px;
+  }
+
+  p { margin: 0 0 16px; }
+
+  /* ---------- Abstract ---------- */
+  .abstract {
+    font-size: 1.02rem;
+    color: #2b2b2b;
+    text-align: justify;
+  }
+
+  /* ---------- Method ---------- */
+  .method p { margin-bottom: 14px; }
+
+  .math {
+    display: block;
+    text-align: center;
+    font-family: "Cambria Math", "Latin Modern Math", Georgia, serif;
+    font-size: 1.05rem;
+    margin: 18px 0;
+    color: #1a1a1a;
+  }
+
+  /* ---------- Feature grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+
+  .card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--accent);
+  }
+
+  .card p {
+    font-size: 0.94rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* ---------- Code ---------- */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin: 14px 0;
+  }
+
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9em;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  /* ---------- Table ---------- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin: 14px 0;
+  }
+
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    font-weight: 600;
+    background: var(--card);
+    color: var(--fg);
+  }
+
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 40px 0 56px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 640px) {
+    h1.title { font-size: 1.75rem; }
+    p.subtitle { font-size: 1rem; }
+    section { padding: 40px 0; }
+    h2 { font-size: 1.35rem; }
+    .container { padding: 0 18px; }
+    .btn { padding: 9px 16px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <span class="venue">ICLR 2027 · Under Review</span>
+    <h1 class="title">EvoRule Harness</h1>
+    <p class="subtitle">
+      Lifelong Harness Adaptation with a Two-Tier Memory of Validated Causal Rules
+    </p>
+    <p class="authors">Anonymous Authors</p>
+    <p class="affiliation">Paper under double-blind review</p>
+
+    <div class="buttons">
+      <a class="btn primary" href="https://github.com/yhe234/EvoMem" target="_blank" rel="noopener">
+        Code
+      </a>
+      <a class="btn" href="#method">Method</a>
+      <a class="btn" href="#results">Results</a>
+      <a class="btn" href="#quickstart">Quick Start</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ABSTRACT ============ -->
+<section id="abstract">
+  <div class="container">
+    <h2>Abstract</h2>
+    <p class="abstract">
+      We present <strong>EvoRule Harness</strong>, a plug-and-play framework for lifelong harness
+      adaptation built around a two-tier memory of validated causal rules. Unlike existing
+      memory-based approaches that store undifferentiated experience, EvoRule Harness represents
+      each adaptation as a testable causal rule linking an applicability context to an
+      intervention, together with execution feedback, confidence, and lifespan. When a failure
+      occurs, the resulting reflection is converted into independently traceable atomic patches
+      over <code>Add</code>, <code>Delete</code>, <code>Refine</code>, <code>Split</code>, and
+      <code>Merge</code>, allowing each update to be validated, attributed, and rolled back
+      separately. New or revised rules first enter a <em>volatile tier</em>, where they are
+      re-tested and continuously revalidated as new evidence arrives. Only rules that remain
+      reliable over repeated validation are promoted to <em>stable memory</em>. Crucially,
+      volatile rules can already guide inference, but cannot directly overwrite stable knowledge;
+      when the two tiers prescribe conflicting interventions, stable rules take precedence.
+      Stable memory itself evolves conservatively, with modifications restricted to
+      <code>Merge</code> or <code>Delete</code> after repeated cross-subset failures. EvoRule
+      Harness operates entirely around a frozen backbone and existing harness optimizer, requiring
+      no gradients, weight updates, or task-specific training.
+    </p>
+  </div>
+</section>
+
+<!-- ============ METHOD ============ -->
+<section id="method" class="method">
+  <div class="container">
+    <h2>Method</h2>
+
+    <h3>Two-tier rule memory</h3>
+    <p>
+      Each rule links an applicability context <code>phi</code> to an intervention
+      <code>psi</code>, with execution feedback <code>omega</code>, calibrated confidence
+      <code>c</code>, and lifespan <code>tau</code>:
+    </p>
+    <span class="math">r = &lt;&phi;, &psi;, &omega;, c, &tau;&gt;</span>
+    <p>The rule base is the disjoint union of a stable tier and a volatile tier:</p>
+    <span class="math">E<sub>t</sub> = E<sub>t</sub><sup>stable</sup> &nbsp;&cup;&nbsp; E<sub>t</sub><sup>volatile</sup></span>
+
+    <h3>Atomic edit operations</h3>
+    <p>Every update is an independently traceable patch over the operation set:</p>
+    <span class="math">O = { ADD, DELETE, REFINE, SPLIT, MERGE }</span>
+    <p>
+      Each patch is logged separately with its own provenance, pass/fail outcome, and rollback
+      metadata, enabling precise credit assignment.
+    </p>
+
+    <h3>Evidence-gated promotion</h3>
+    <p>A volatile rule is promoted to the stable tier only when</p>
+    <span class="math">c<sub>t</sub> &ge; &theta;<sub>c</sub> &nbsp;&nbsp;and&nbsp;&nbsp; a<sub>t</sub> &ge; &theta;<sub>age</sub></span>
+    <p>
+      where confidence follows a Beta-Bernoulli posterior with prior strength
+      <code>n<sub>0</sub></code>:
+    </p>
+    <span class="math">
+      &alpha;<sub>0</sub> = n<sub>0</sub> c<sub>0</sub>,
+      &nbsp;&nbsp;
+      &beta;<sub>0</sub> = n<sub>0</sub> (1 &minus; c<sub>0</sub>),
+      &nbsp;&nbsp;
+      c<sub>t</sub> = (&alpha;<sub>0</sub> + S<sub>t</sub>) / (&alpha;<sub>0</sub> + &beta;<sub>0</sub> + S<sub>t</sub> + F<sub>t</sub>)
+    </span>
+    <p>
+      Promotion is atomic and one-way. Stable memory is never directly modified by volatile edits.
+    </p>
+
+    <h3>Stable protection</h3>
+    <p>
+      Stable rules may only be modified by <code>Merge</code> or <code>Delete</code>, triggered
+      only after repeated cross-subset underperformance. Direct <code>Refine</code> or
+      <code>Split</code> on stable rules is rejected. Conflicts resolve in favor of the stable
+      tier.
+    </p>
+
+    <h3>Inference</h3>
+    <p>
+      Given a query, retrieve Top-K rules separately from each tier by cosine similarity, merge
+      candidates, and resolve conflicts in favor of the stable rule.
+    </p>
+  </div>
+</section>
+
+<!-- ============ HIGHLIGHTS ============ -->
+<section id="highlights">
+  <div class="container">
+    <h2>Highlights</h2>
+    <div class="grid">
+      <div class="card">
+        <h4>Training-free</h4>
+        <p>No gradients, no weight updates, no task-specific training.</p>
+      </div>
+      <div class="card">
+        <h4>Plug-and-play</h4>
+        <p>Attaches to any frozen backbone and existing harness optimizer.</p>
+      </div>
+      <div class="card">
+        <h4>Non-regressive</h4>
+        <p>A single bad round cannot overwrite validated knowledge.</p>
+      </div>
+      <div class="card">
+        <h4>Auditable</h4>
+        <p>Every update is independently traceable and rollback-capable.</p>
+      </div>
+      <div class="card">
+        <h4>Interpretable</h4>
+        <p>Rules are explicit &lt;phi, psi&gt; pairs with calibrated confidence.</p>
+      </div>
+      <div class="card">
+        <h4>Composable</h4>
+        <p>Add new integrations by connecting proposer, judger, and executor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section id="results">
+  <div class="container">
+    <h2>Results</h2>
+    <p>
+      EvoRule Harness improves existing harness optimizers by up to <strong>35.7%</strong> on
+      average, with gains that grow over sequential adaptation rounds.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Base harness</th>
+          <th class="num">Baseline</th>
+          <th class="num">+ EvoRule</th>
+          <th class="num">Gain</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Continual Harness</td>
+          <td class="num">39.2</td>
+          <td class="num">53.2</td>
+          <td class="num">+35.7%</td>
+        </tr>
+        <tr>
+          <td>TTHE</td>
+          <td class="num">61.1</td>
+          <td class="num">66.3</td>
+          <td class="num">+8.5%</td>
+        </tr>
+        <tr>
+          <td>Meta-Harness</td>
+          <td class="num">63.0</td>
+          <td class="num">67.4</td>
+          <td class="num">+7.0%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Ablation</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Configuration</th>
+          <th class="num">Pass@1</th>
+          <th class="num">Drop</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>EvoRule Harness (full)</td><td class="num">80.3</td><td class="num">—</td></tr>
+        <tr><td>w/o Promotion</td><td class="num">77.2</td><td class="num">-3.1</td></tr>
+        <tr><td>w/o Volatile Tier</td><td class="num">76.8</td><td class="num">-3.5</td></tr>
+        <tr><td>w/o Stable Tier</td><td class="num">76.6</td><td class="num">-3.7</td></tr>
+        <tr><td>w/o Credit Assignment</td><td class="num">77.8</td><td class="num">-2.5</td></tr>
+        <tr><td>w/o Atomic Ops</td><td class="num">78.9</td><td class="num">-1.4</td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size: 0.9rem; color: var(--muted); margin-top: 12px;">
+      Removing either tier, the promotion gate, credit assignment, or the atomic operation set
+      substantially degrades performance, confirming that controlled consolidation is a key
+      ingredient for reliable lifelong harness adaptation.
+    </p>
+  </div>
+</section>
+
+<!-- ============ QUICK START ============ -->
+<section id="quickstart">
+  <div class="container">
+    <h2>Quick Start</h2>
+
+    <h3>Installation</h3>
+<pre><code>git clone https://github.com/yhe234/EvoMem.git
+cd EvoMem
+pip install -e .</code></pre>
+
+    <h3>Minimal example</h3>
+<pre><code>from evorule_harness import (
+    EvoRuleConfig, EvoRuleEngine, Patch, PatchOperation,
+    Rule, SQLiteStore, ValidationEvidence,
+)
+
+store = SQLiteStore(":memory:")
+engine = EvoRuleEngine(store, config=EvoRuleConfig(
+    prior_strength=2.0,        # n0
+    promotion_confidence=0.8,  # theta_c
+    promotion_age=3,           # theta_age
+))
+
+rule = Rule(
+    rule_id="contrastive-verify",
+    phi="identical retrieved labels and low confidence",
+    psi="retrieve counterexamples and ask for comparative verification",
+    omega="pending",
+    initial_confidence=0.9,
+)
+patch = Patch(
+    patch_id="repair-contrastive",
+    operation=PatchOperation.ADD,
+    result_rules=(rule,),
+    context=rule.phi,
+    judge_confidence=0.9,
+    provenance={"failure_case": "rare-class-retrieval"},
+)
+
+# Round 1: stage + retest on the original failure
+engine.update_cycle([patch], 1, [
+    ValidationEvidence(patch_id=patch.patch_id, success=True,
+                       subset_id="gastro", round_id=1,
+                       original_failure_recovered=True)
+])
+
+# Rounds 2-3: cross-subset validation
+engine.update_cycle([], 2, [ValidationEvidence(
+    patch_id=patch.patch_id, success=True,
+    subset_id="dermatology", round_id=2)])
+engine.update_cycle([], 3, [ValidationEvidence(
+    patch_id=patch.patch_id, success=True,
+    subset_id="vascular", round_id=3)])
+
+# Round 4: promotion
+result = engine.update_cycle([], 4)
+print(result["promoted"])                          # [contrastive-verify]
+print(store.get_rule("contrastive-verify").tier)   # RuleTier.STABLE
+store.close()</code></pre>
+
+    <h3>Deterministic demo</h3>
+<pre><code>python -m evorule_harness.demo</code></pre>
+
+    <h3>Run experiments</h3>
+<pre><code>python -m experiments.run_all --seed 0 --rounds 10
+python -m reports.generate_tables
+python -m reports.generate_figures</code></pre>
+  </div>
+</section>
+
+<!-- ============ INTEGRATIONS ============ -->
+<section id="integrations">
+  <div class="container">
+    <h2>Integrations</h2>
+    <p>
+      EvoRule Harness is a plug-and-play memory layer: it attaches to a frozen backbone and an
+      existing harness optimizer without modifying either. Working examples live under
+      <code>integrations/</code>:
+    </p>
+    <ul>
+      <li><code>integrations/tthe/</code> — EvoRule Harness + TTHE</li>
+      <li><code>integrations/meta_harness/</code> — EvoRule Harness + Meta-Harness</li>
+    </ul>
+    <p>
+      <strong>Adding new integrations is straightforward.</strong> The core requirement is to
+      connect EvoRule Harness to three components of the base harness:
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h4>Proposer</h4>
+        <p>Generates candidate edits or harness updates.</p>
+      </div>
+      <div class="card">
+        <h4>Judger</h4>
+        <p>Diagnoses failures and produces reflections.</p>
+      </div>
+      <div class="card">
+        <h4>Executor</h4>
+        <p>Applies candidate edits and re-tests them.</p>
+      </div>
+    </div>
+    <p style="margin-top: 16px;">
+      EvoRule Harness sits between these three: it converts the judger's reflections into atomic
+      patches, stages them in the volatile tier, and promotes them to the stable tier only after
+      evidence-gated validation. Any base harness exposing these three roles can be integrated
+      via a thin adapter under <code>integrations/</code>.
+    </p>
+  </div>
+</section>
+
+<!-- ============ CONFIGURATION ============ -->
+<section id="configuration">
+  <div class="container">
+    <h2>Configuration</h2>
+    <p>All hyperparameters live in <code>EvoRuleConfig</code>:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Default</th>
+          <th>Reference</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>prior_strength</code> (n<sub>0</sub>)</td><td>2.0</td><td>Eq. 6</td></tr>
+        <tr><td><code>promotion_confidence</code> (&theta;<sub>c</sub>)</td><td>0.8</td><td>Eq. 5</td></tr>
+        <tr><td><code>promotion_age</code> (&theta;<sub>age</sub>)</td><td>3</td><td>Eq. 5</td></tr>
+        <tr><td><code>influence_threshold</code> (&epsilon;)</td><td>0.6</td><td>Sec. 3.1</td></tr>
+        <tr><td><code>context_match_confidence</code></td><td>0.7</td><td>Appendix A.4</td></tr>
+        <tr><td><code>stable_failure_rounds</code></td><td>5</td><td>Sec. 3.2</td></tr>
+        <tr><td><code>stable_failure_subsets</code></td><td>2</td><td>Sec. 3.2</td></tr>
+        <tr><td><code>promotion_subsets</code></td><td>1</td><td>Eq. 5</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 0.9rem; color: var(--muted);">
+      Set <code>promotion_subsets &gt;= 2</code> to enable the stricter multi-subset gate.
+    </p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <p>
+      <a href="https://github.com/yhe234/EvoMem" target="_blank" rel="noopener">GitHub</a>
+      &nbsp;·&nbsp;
+      <a href="#abstract">Abstract</a>
+      &nbsp;·&nbsp;
+      <a href="#method">Method</a>
+      &nbsp;·&nbsp;
+      <a href="#results">Results</a>
+      &nbsp;·&nbsp;
+      <a href="#quickstart">Quick Start</a>
+    </p>
+    <p style="margin-top: 12px;">
+      Paper under double-blind review at ICLR 2027.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
