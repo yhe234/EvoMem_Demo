@@ -90,33 +90,6 @@
 
   header.hero > .container { position: relative; z-index: 1; }
 
-  .venue {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(255, 255, 255, 0.85);
-    padding: 8px 18px;
-    border-radius: 999px;
-    margin-bottom: 30px;
-    border: 1px solid rgba(22, 103, 214, 0.22);
-    box-shadow: 0 4px 14px rgba(22, 103, 214, 0.10);
-    backdrop-filter: blur(8px);
-  }
-
-  .venue::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 0 3px rgba(10, 125, 60, 0.18);
-  }
-
   h1.title {
     font-size: 3.6rem;
     line-height: 1.1;
@@ -639,7 +612,6 @@
 <!-- ==================== HERO ==================== -->
 <header class="hero">
   <div class="container">
-    <span class="venue">ICLR 2027 · Under Review</span>
     <h1 class="title">EvoRule Harness</h1>
     <p class="subtitle">
       Lifelong Harness Adaptation with a Two-Tier Memory of Validated Causal Rules
@@ -1041,7 +1013,6 @@ python -m reports.generate_figures</code></pre>
       <strong>Yujin Choi</strong>, <strong>Jaehong Yoon</strong>
       &nbsp;·&nbsp; Nanyang Technological University, Singapore
     </p>
-    <p class="note">Paper under double-blind review at ICLR 2027.</p>
   </div>
 </footer>
 
