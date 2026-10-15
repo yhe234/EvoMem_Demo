@@ -295,6 +295,54 @@
     pointer-events: none;
   }
 
+  /* ==================== PDF VIEWER ==================== */
+  .pdf-frame {
+    position: relative;
+    margin: 20px 0 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-soft);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pdf-frame::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-3), var(--gold));
+    z-index: 2;
+  }
+
+  .pdf-frame iframe {
+    display: block;
+    width: 100%;
+    height: 640px;
+    border: 0;
+    background: #fff;
+  }
+
+  .pdf-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 0 10px;
+  }
+
+  .pdf-note {
+    font-size: 0.92rem;
+    color: var(--muted);
+    text-align: center;
+    margin: 0;
+  }
+
+  .pdf-note code {
+    font-size: 0.85em;
+  }
+
   /* ==================== METHOD ==================== */
   .method p { margin-bottom: 18px; color: #2a3138; }
 
@@ -597,6 +645,7 @@
     th, td { padding: 12px 14px; font-size: 0.88rem; }
     .card { padding: 24px 22px; }
     pre { padding: 18px 18px; font-size: 0.82rem; }
+    .pdf-frame iframe { height: 420px; }
   }
 
   @media (max-width: 480px) {
@@ -604,6 +653,7 @@
     p.subtitle { font-size: 1rem; }
     .authors .sep { display: none; }
     .authors { flex-direction: column; gap: 6px; }
+    .pdf-frame iframe { height: 320px; }
   }
 </style>
 </head>
@@ -632,6 +682,7 @@
 
     <div class="buttons">
       <a class="btn primary" href="https://github.com/yhe234/EvoMem" target="_blank" rel="noopener">Code</a>
+      <a class="btn" href="assets/Evomem_framework.pdf" target="_blank" rel="noopener">Framework PDF</a>
       <a class="btn" href="#method">Method</a>
       <a class="btn" href="#results">Results</a>
       <a class="btn" href="#quickstart">Quick Start</a>
@@ -662,6 +713,45 @@
       <code>Merge</code> or <code>Delete</code> after repeated cross-subset failures. EvoRule
       Harness operates entirely around a frozen backbone and existing harness optimizer, requiring
       no gradients, weight updates, or task-specific training.
+    </p>
+  </div>
+</section>
+
+<!-- ==================== FRAMEWORK (PDF) ==================== -->
+<section id="framework">
+  <div class="container">
+    <span class="section-label">Framework</span>
+    <h2>System overview</h2>
+    <p>
+      The figure below gives an end-to-end view of EvoRule Harness: failure-driven reflection is
+      converted into atomic patches, staged in the volatile tier, revalidated across subsets, and
+      promoted to stable memory only after the evidence gate is satisfied.
+    </p>
+
+    <!-- 直接内嵌 assets/Evomem_framework.pdf -->
+    <div class="pdf-frame">
+      <iframe
+        src="assets/Evomem_framework.pdf#view=FitH&toolbar=1&navpanes=0"
+        title="EvoRule Harness framework diagram"
+        loading="lazy">
+        <p>
+          Your browser does not support inline PDFs.
+          <a href="assets/Evomem_framework.pdf" target="_blank" rel="noopener">Download the framework PDF</a>.
+        </p>
+      </iframe>
+    </div>
+
+    <div class="pdf-actions">
+      <a class="btn" href="assets/Evomem_framework.pdf" target="_blank" rel="noopener">
+        Open PDF in new tab
+      </a>
+      <a class="btn" href="assets/Evomem_framework.pdf" download>
+        Download PDF
+      </a>
+    </div>
+
+    <p class="pdf-note">
+      Source file: <code>assets/Evomem_framework.pdf</code>
     </p>
   </div>
 </section>
@@ -1002,6 +1092,7 @@ python -m reports.generate_figures</code></pre>
     <div class="footer-links">
       <a href="https://github.com/yhe234/EvoMem" target="_blank" rel="noopener">GitHub</a>
       <a href="#abstract">Abstract</a>
+      <a href="#framework">Framework</a>
       <a href="#method">Method</a>
       <a href="#results">Results</a>
       <a href="#quickstart">Quick Start</a>
